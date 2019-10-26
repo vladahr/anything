@@ -35,7 +35,7 @@ namespace Anything.Api.Infrastructure.Services.Entity
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<string>> GetEntitiesAsync(EntityGet model)
+        public async Task<IEnumerable<object>> GetEntitiesAsync(EntityGet model)
         {
             if (string.IsNullOrWhiteSpace(model.EntityTypeName))
                 throw new ArgumentException("Entity type is not specified");
@@ -44,7 +44,9 @@ namespace Anything.Api.Infrastructure.Services.Entity
             var result = await (from et in dbContext.EntityTypes
                                 join e in dbContext.Entities on et.Id equals e.EntityTypeId
                                 where et.Name == entityTypeName
-                                select e.Data).ToListAsync();
+                                select e.Data)
+                                .Select(x => JsonSerializer.Deserialize<object>(x, null))
+                                .ToListAsync();
             return result;
         }
 

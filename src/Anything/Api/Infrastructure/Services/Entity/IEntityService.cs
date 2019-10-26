@@ -7,6 +7,6 @@ namespace Anything.Api.Infrastructure.Services.Entity
     public interface IEntityService
     {
         Task AddEntityAsync(EntityAdd model);
-        Task<IEnumerable<string>> GetEntitiesAsync(EntityGet model);
+        Task<IEnumerable<object>> GetEntitiesAsync(EntityGet model);
     }
 }
